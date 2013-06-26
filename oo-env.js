@@ -1,4 +1,4 @@
-#!/bin/node
+#!/usr/bin/env node
 
 require('js-yaml');
 var fs = require('fs');
@@ -25,10 +25,10 @@ ENV['OPENSHIFT_' + name + '_VERSION'] = '2.0';
 ENV['OPENSHIFT_' + name + '_IDENT'] =  manifest['Cartridge-Vendor'] + ':' + manifest['Name'] + ':' + manifest['Version'] + ':' + manifest['Cartridge-Version'] ;
 
 manifest['Endpoints'].forEach(function(endpoint){
-  if(!endpoint['Private-IP-Name'] != 'IP') return;
+  if(endpoint['Private-IP-Name'] != 'IP') return;
   var portName = endpoint['Private-Port-Name'];
   var port = endpoint['Private-Port'];
-  ENV['OPENSHIFT_' + portName + '_IP'] =  port;
+  ENV['OPENSHIFT_' + name + '_' + portName] =  port;
 });
 
 ENV['OPENSHIFT_TMP_DIR']='/tmp/';
@@ -68,7 +68,7 @@ ENV['OPENSHIFT_DATA_DIR'] = dataDir + '/';
 
 ENV['CARTRIDGE_VERSION_2'] = '2';
 
-var sdkDir = Path.join(__dirname, '..', 'sdk');
+var sdkDir = Path.join(__dirname, 'sdk');
 ENV['OPENSHIFT_CARTRIDGE_SDK_BASH'] =  sdkDir + '/sdk';
 ENV['OPENSHIFT_CARTRIDGE_SDK_RUBY'] =  sdkDir + '/sdk.rb';
 
